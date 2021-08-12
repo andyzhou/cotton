@@ -3,7 +3,9 @@ package main
 import (
 	"fmt"
 	"github.com/andyzhou/cotton"
+	"github.com/andyzhou/cotton/iface"
 	"github.com/emicklei/go-restful/v3"
+	"io"
 	"os"
 	"sync"
 )
@@ -14,8 +16,10 @@ const (
 )
 
 //cb for sub router
-func cbOfRouter(req *restful.Request, resp *restful.Response) {
-	fmt.Println("cbOfRouter...")
+func cbOfRouter(req *restful.Request, resp *restful.Response, tool iface.ITool) {
+	page := req.QueryParameter("page")
+	io.WriteString(resp, "cbOfRouter...")
+	io.WriteString(resp, fmt.Sprintf("page:%s", page))
 }
 
 func main() {

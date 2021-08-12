@@ -33,6 +33,7 @@ type DynamicSubRoute struct {
 	RouteFunc func(
 					request *restful.Request,
 					response *restful.Response,
+					tool iface.ITool,
 				)
 }
 

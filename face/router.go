@@ -3,6 +3,7 @@ package face
 import (
 	"fmt"
 	"github.com/andyzhou/cotton/define"
+	"github.com/andyzhou/cotton/iface"
 	"github.com/emicklei/go-restful/v3"
 	"sync"
 )
@@ -21,6 +22,7 @@ type SubRouterReg struct {
 //face info
 type Router struct {
 	subRouteFace sync.Map //tag -> func
+	tool iface.ITool
 }
 
 //construct
@@ -28,6 +30,7 @@ func NewRouter() *Router {
 	//self init
 	this := &Router{
 		subRouteFace: sync.Map{},
+		tool: NewTool(),
 	}
 	return this
 }
@@ -48,13 +51,13 @@ func (f *Router) Entry(
 		return
 	}
 	//call sub route func
-	v(req, resp)
+	v(req, resp, f.tool)
 }
 
 //register sub router
 func (f *Router) RegisterRoute(
 				module, action string,
-				cb func(req *restful.Request, resp *restful.Response),
+				cb func(*restful.Request, *restful.Response, iface.ITool),
 			) bool {
 	//check
 	if module == "" || cb == nil {
@@ -82,7 +85,7 @@ func (f *Router) formatTag(module, action string) string {
 //get sub route by tag
 func (f *Router) getSubRouteByTag(
 					tag string,
-				) func(req *restful.Request, resp *restful.Response) {
+				) func(*restful.Request, *restful.Response, iface.ITool) {
 	if tag == "" {
 		return nil
 	}
@@ -90,7 +93,7 @@ func (f *Router) getSubRouteByTag(
 	if !ok {
 		return nil
 	}
-	cb, ok := v.(func(req *restful.Request, resp *restful.Response))
+	cb, ok := v.(func(*restful.Request, *restful.Response, iface.ITool))
 	if !ok {
 		return nil
 	}
