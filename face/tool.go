@@ -22,6 +22,7 @@ const (
 type Tool struct {
 	decoder *schema.Decoder
 	jwt iface.IJwt
+	json iface.IJson
 }
 
 //construct
@@ -29,9 +30,15 @@ func NewTool() *Tool {
 	//self init
 	this := &Tool{
 		decoder: schema.NewDecoder(),
+		json: NewJson(),
 	}
 	this.decoder.IgnoreUnknownKeys(true)
 	return this
+}
+
+//get json instance
+func (f *Tool) GetJson() iface.IJson {
+	return f.json
 }
 
 //get jwt instance

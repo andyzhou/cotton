@@ -111,7 +111,7 @@ func (f *Router) checkReferDomain(req *restful.Request) bool {
 	//get refer domain
 	referDomain := f.tool.GetReferDomain(req)
 	if referDomain == "" {
-		return false
+		return true
 	}
 	for _, v := range f.referDomains {
 		if referDomain == v {
