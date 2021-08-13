@@ -5,6 +5,7 @@ import (
 	"github.com/andyzhou/cotton/define"
 	"github.com/andyzhou/cotton/iface"
 	"github.com/emicklei/go-restful/v3"
+	"net/http"
 	"sync"
 )
 
@@ -22,6 +23,7 @@ type SubRouterReg struct {
 //face info
 type Router struct {
 	subRouteFace sync.Map //tag -> func
+	referDomains []string
 	tool iface.ITool
 }
 
@@ -30,6 +32,7 @@ func NewRouter() *Router {
 	//self init
 	this := &Router{
 		subRouteFace: sync.Map{},
+		referDomains: make([]string, 0),
 		tool: NewTool(),
 	}
 	return this
@@ -38,6 +41,15 @@ func NewRouter() *Router {
 //set jwt
 func (f *Router) SetJwt(secretKey string) bool {
 	return f.tool.SetJwt(secretKey)
+}
+
+//add refer domains
+func (f *Router) AddReferDomains(domains ...string) bool {
+	if domains == nil || len(domains) <= 0 {
+		return false
+	}
+	f.referDomains = append(f.referDomains, domains...)
+	return true
 }
 
 //entry
@@ -53,8 +65,17 @@ func (f *Router) Entry(
 	tag := f.formatTag(module, action)
 	v := f.getSubRouteByTag(tag)
 	if v == nil {
+		resp.WriteErrorString(http.StatusBadRequest, "invalid request url")
 		return
 	}
+
+	//check refer domain
+	bRet := f.checkReferDomain(req)
+	if !bRet {
+		resp.WriteErrorString(http.StatusNotAcceptable, "invalid refer domain from request")
+		return
+	}
+
 	//call sub route func
 	v(req, resp, f.tool)
 }
@@ -81,6 +102,24 @@ func (f *Router) RegisterRoute(
 ////////////////
 //private func
 ////////////////
+
+//check refer domain
+func (f *Router) checkReferDomain(req *restful.Request) bool {
+	if f.referDomains == nil || len(f.referDomains) <= 0 {
+		return true
+	}
+	//get refer domain
+	referDomain := f.tool.GetReferDomain(req)
+	if referDomain == "" {
+		return false
+	}
+	for _, v := range f.referDomains {
+		if referDomain == v {
+			return true
+		}
+	}
+	return false
+}
 
 //format tag
 func (f *Router) formatTag(module, action string) string {

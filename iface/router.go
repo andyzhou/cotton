@@ -15,4 +15,5 @@ type IRouter interface {
 		cb func(req *restful.Request, resp *restful.Response, tool ITool),
 	) bool
 	SetJwt(secretKey string) bool
+	AddReferDomains(domains ...string) bool
 }

@@ -13,6 +13,8 @@ import (
 //server example
 const (
 	ServerPort = 8080
+	ReferDomain = "http://localhost:8080"
+	JwtSecretKey = "fj#$asB9@"
 )
 
 //cb for sub router
@@ -37,6 +39,14 @@ func main() {
 		Action: "list",
 		RouteFunc: cbOfRouter,
 	}
+
+	//add refer domains (optional)
+	router.AddReferDomains(ReferDomain)
+
+	//set jwt secret key (optional)
+	router.SetJwt(JwtSecretKey)
+
+	//register route
 	err := router.RegisterDynamicRoute(subRouter)
 	if err != nil {
 		fmt.Println(err)
@@ -46,5 +56,6 @@ func main() {
 	wg.Add(1)
 	//start
 	router.Start()
+	fmt.Printf("server listen on :%d\n", ServerPort)
 	wg.Wait()
 }

@@ -7,6 +7,6 @@ type ITool interface {
 	SetJwt(secretKey string) bool
 	GetJwt() IJwt
 	ParseReqForm(formFace interface{}, req *restful.Request) error
-	GetReferDomain(referUrl string) string
+	GetReferDomain(req *restful.Request) string
 	GetClientIp(req *restful.Request) []string
 }

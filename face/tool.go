@@ -73,13 +73,14 @@ func (f *Tool) ParseReqForm(formFace interface{}, req *restful.Request) error {
 }
 
 //get refer domain
-func (f *Tool) GetReferDomain(referUrl string) string {
+func (f *Tool) GetReferDomain(req *restful.Request) string {
 	var (
 		referDomain string
 	)
-	if referUrl == "" {
+	if req == nil {
 		return referDomain
 	}
+	referUrl := req.Request.Referer()
 	//find first '://' pos
 	protocolLen := len(HttpProtocol)
 	protocolPos := strings.Index(referUrl, HttpProtocol)

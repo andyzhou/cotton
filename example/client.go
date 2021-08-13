@@ -19,6 +19,7 @@ func main() {
 	//setup request
 	req := face.NewHttpReq()
 	req.SetReqUrl(fmt.Sprintf("%s/%s", reqDomain, reqUrl))
+	req.SetReqKind(cotton.ReqKindOfGet)
 
 	//send request
 	resp := client.SendReq(req)

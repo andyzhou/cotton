@@ -1,8 +1,8 @@
 package face
 
 import (
+	"errors"
 	"github.com/dgrijalva/jwt-go"
-	"log"
 )
 
 /*
@@ -27,34 +27,31 @@ func NewJwt(secretKey string) *Jwt {
 }
 
 //encode
-func (j *Jwt) Encode(input map[string]interface{}) string {
+func (j *Jwt) Encode(input map[string]interface{}) (string, error) {
 	j.claims = input
 	j.token.Claims = j.claims
 	result, err := j.token.SignedString([]byte(j.secret))
 	if err != nil {
-		log.Println("Encode jwt failed, error:", err.Error())
-		return ""
+		return "", err
 	}
-	return result
+	return result, nil
 }
 
 //decode
-func (j *Jwt) Decode(input string) map[string]interface{} {
+func (j *Jwt) Decode(input string) (map[string]interface{}, error) {
 	//parse input string
 	token, err := jwt.Parse(input, j.getValidationKey)
 	if err != nil {
-		log.Println("Decode ", input, " failed, error:", err.Error())
-		return nil
+		return nil, err
 	}
 	//check header
 	if jwt.SigningMethodHS256.Alg() != token.Header["alg"] {
-		log.Println("Header error")
-		return nil
+		return nil, errors.New("jwt header not matched")
 	}
 	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
-		return claims
+		return claims, nil
 	}
-	return nil
+	return nil, errors.New("decode jwt data failed")
 }
 
 //get validate key

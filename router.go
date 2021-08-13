@@ -71,6 +71,11 @@ func (r *Router) SetJwt(secretKey string) bool {
 	return r.router.SetJwt(secretKey)
 }
 
+//add refer domains
+func (r *Router) AddReferDomains(domains ...string) bool {
+	return r.router.AddReferDomains(domains...)
+}
+
 //register dynamic route, step-2
 func (r *Router) RegisterDynamicRoute(router *DynamicSubRoute) error {
 	//check

@@ -9,6 +9,11 @@ import (
  * http client
  */
 
+const (
+	ReqKindOfGet = iota
+	ReqKindOfPost
+)
+
 //client face
 type Client struct {
 	queue iface.IHttpQueue
