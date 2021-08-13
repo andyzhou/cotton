@@ -3,6 +3,7 @@ package face
 import (
 	"errors"
 	"fmt"
+	"github.com/andyzhou/cotton/iface"
 	"github.com/emicklei/go-restful/v3"
 	"github.com/gorilla/schema"
 	"strings"
@@ -20,6 +21,7 @@ const (
 //face info
 type Tool struct {
 	decoder *schema.Decoder
+	jwt iface.IJwt
 }
 
 //construct
@@ -30,6 +32,23 @@ func NewTool() *Tool {
 	}
 	this.decoder.IgnoreUnknownKeys(true)
 	return this
+}
+
+//get jwt instance
+func (f *Tool) GetJwt() iface.IJwt {
+	return f.jwt
+}
+
+//init jwt instance
+func (f *Tool) SetJwt(secretKey string) bool {
+	if secretKey == "" {
+		return false
+	}
+	if f.jwt != nil {
+		return true
+	}
+	f.jwt = NewJwt(secretKey)
+	return true
 }
 
 //parse request form

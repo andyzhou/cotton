@@ -10,6 +10,10 @@ import (
 	"net/http"
 )
 
+/*
+ * http rest router service
+ */
+
 //macro define
 const (
 	//req method
@@ -60,6 +64,11 @@ func NewRouter(httpPort int) *Router {
 	}
 	this.interInit()
 	return this
+}
+
+//set jwt for tool (optional)
+func (r *Router) SetJwt(secretKey string) bool {
+	return r.router.SetJwt(secretKey)
 }
 
 //register dynamic route, step-2

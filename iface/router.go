@@ -14,4 +14,5 @@ type IRouter interface {
 		module, action string,
 		cb func(req *restful.Request, resp *restful.Response, tool ITool),
 	) bool
+	SetJwt(secretKey string) bool
 }

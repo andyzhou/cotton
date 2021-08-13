@@ -35,6 +35,11 @@ func NewRouter() *Router {
 	return this
 }
 
+//set jwt
+func (f *Router) SetJwt(secretKey string) bool {
+	return f.tool.SetJwt(secretKey)
+}
+
 //entry
 func (f *Router) Entry(
 					req *restful.Request,
