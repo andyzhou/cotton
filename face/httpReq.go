@@ -8,7 +8,7 @@ import "github.com/andyzhou/cotton/iface"
 
 //face info
 type HttpReq struct {
-	Kind int `GET or POST`
+	Kind int //GET or POST
 	Url string
 	Headers map[string]string
 	Params map[string]interface{}
@@ -113,12 +113,12 @@ func (f *HttpReq) SetReqKind(kind int) {
 }
 
 //get request url
-func (f HttpReq) GetReqUrl() string {
+func (f *HttpReq) GetReqUrl() string {
 	return f.Url
 }
 
 //set request url
-func (f HttpReq) SetReqUrl(url string) bool {
+func (f *HttpReq) SetReqUrl(url string) bool {
 	if url == "" {
 		return false
 	}
