@@ -62,7 +62,6 @@ func NewRouter(httpPort int) *Router {
 		rest: face.NewRest(ws),
 		router: face.NewRouter(),
 	}
-	this.interInit()
 	return this
 }
 
@@ -129,12 +128,4 @@ func (r *Router) ParseReqForm(
 				req *restful.Request,
 			) error {
 	return r.rest.ParseReqForm(formFace, req)
-}
-
-///////////////
-//private func
-///////////////
-
-//inter init
-func (r *Router) interInit() {
 }

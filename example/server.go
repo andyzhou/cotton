@@ -33,6 +33,7 @@ func main() {
 	router := cotton.NewRouter(ServerPort)
 
 	//init sub router
+	//url: http://localhost:8080/test/list?page=1
 	subRouter := &cotton.DynamicSubRoute{
 		RouteUrl: "/",
 		Module: "test",
