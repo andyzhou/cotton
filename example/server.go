@@ -18,7 +18,11 @@ const (
 )
 
 //cb for sub router
-func cbOfRouter(req *restful.Request, resp *restful.Response, tool iface.ITool) {
+func cbOfRouter(
+			req *restful.Request,
+			resp *restful.Response,
+			tool iface.ITool,
+		) {
 	page := req.QueryParameter("page")
 	io.WriteString(resp, "cbOfRouter...")
 	io.WriteString(resp, fmt.Sprintf("page:%s", page))
@@ -57,6 +61,6 @@ func main() {
 	wg.Add(1)
 	//start
 	router.Start()
-	fmt.Printf("server listen on :%d\n", ServerPort)
+	fmt.Printf("server listen on http://localhost:%d\n", ServerPort)
 	wg.Wait()
 }

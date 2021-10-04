@@ -27,6 +27,7 @@ import (
 
 //face info
 type HttpQueue struct {
+	clientNum int
 	clients map[int]*http.Client //http client instance map
 	reqChan chan iface.IHttpReq //request lazy chan
 	closeChan chan bool
@@ -34,8 +35,23 @@ type HttpQueue struct {
 }
 
 //construct
-func NewHttpQueue() *HttpQueue {
+func NewHttpQueue(clientNum ...int) *HttpQueue {
+	var (
+		clientNumVal int
+	)
+
+	//set http client num
+	clientNumVal = define.HttpClientMin
+	if clientNum != nil && len(clientNum) > 0 {
+		clientNumVal = clientNum[0]
+	}
+	if clientNumVal > define.HttpClientMax {
+		clientNumVal = define.HttpClientMax
+	}
+
+	//self init
 	this := &HttpQueue{
+		clientNum: clientNumVal,
 		clients: make(map[int]*http.Client),
 		reqChan: make(chan iface.IHttpReq, define.HttpReqChanSize),
 		closeChan: make(chan bool, 1),
@@ -112,7 +128,7 @@ func (f *HttpQueue) runMainProcess() {
 				f.sendRealHttpReq(req)
 			}
 		case <- f.closeChan:
-			break
+			return
 		}
 	}
 }
@@ -317,7 +333,7 @@ func (f *HttpQueue) getClient() *http.Client {
 	if f.clients == nil {
 		return nil
 	}
-	idx := rand.Intn(define.HttpClientMax) + 1
+	idx := rand.Intn(f.clientNum) + 1
 	if idx > define.HttpClientMax {
 		idx = define.HttpClientMax
 	}
@@ -352,7 +368,7 @@ func (f *HttpQueue) createClient() *http.Client {
 //inter init
 func (f *HttpQueue) interInit() {
 	//init batch http clients
-	for i := 1; i <= define.HttpClientMax; i++ {
+	for i := 1; i <= f.clientNum; i++ {
 		client := f.createClient()
 		f.clients[i] = client
 	}

@@ -7,9 +7,10 @@ const (
 )
 
 const (
-	HttpClientMax = 9
-	HttpClientTimeOut = 5
-	HttpReqChanSize = 1024 * 2
+	HttpClientMin = 5
+	HttpClientMax = 1024
+	HttpClientTimeOut = 10
+	HttpReqChanSize = 1024 * 5
 )
 
 const (

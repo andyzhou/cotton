@@ -62,7 +62,10 @@ func (f *Dynamic) Cast(method string, params ...interface{}) bool {
 }
 
 //dynamic call method with parameters support
-func (f *Dynamic) Call(name, method string, params ...interface{}) ([]reflect.Value, error) {
+func (f *Dynamic) Call(
+					name, method string,
+					params ...interface{},
+				) ([]reflect.Value, error) {
 	var (
 		tips string
 	)

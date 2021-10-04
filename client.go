@@ -20,9 +20,9 @@ type Client struct {
 }
 
 //construct
-func NewClient() *Client {
+func NewClient(clientNum ...int) *Client {
 	this := &Client{
-		queue: face.NewHttpQueue(),
+		queue: face.NewHttpQueue(clientNum...),
 	}
 	return this
 }
