@@ -302,11 +302,14 @@ func (f *HttpQueue) genHttpRequest(req iface.IHttpReq) (*http.Request, error) {
 				return nil, err
 			}
 
-			//headers
-			headers := req.GetHeaders()
-			if headers == nil || len(headers) <= 0 {
-				httpReq.Header.Set("Content-Type", "application/x-www-form-urlencoded")
-			}
+			////headers
+			//headers := req.GetHeaders()
+			//if headers != nil {
+			//	for k, v := range headers {
+			//		httpReq.Header.Set(k, v)
+			//	}
+			//}
+			httpReq.Header.Set("Content-Type", "application/x-www-form-urlencoded")
 
 			//format post form
 			if params != nil {

@@ -82,7 +82,7 @@ func (r *Router) RegisterDynamicRoute(router *DynamicSubRoute) error {
 		return errors.New("invalid parameter")
 	}
 	if router.ReqMethod == "" {
-		router.ReqMethod = HttpReqGet
+		router.ReqMethod = HttpReqPost
 	}
 
 	//setup sub router request url
